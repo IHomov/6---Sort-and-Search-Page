@@ -52,27 +52,29 @@
 const URL = 'https://fakestoreapi.com/products';
     
 let MODEL = {
-            rates: [],
-            search: '',
-            sort: null, //true - UP, false - DOWN
-            // renderList() START
-            renderList: function () { 
-                let s = this.search.trim().toLowerCase();
-                let resultList = this.rates.filter(function (item) {
-                    let title = item.title.toLowerCase();
-                    let description = item.description.toLowerCase();
-                    return title.includes(s) || description.includes(s);
-                });
+    rates: [],
+    search: '',
+    sort: null, //true - UP, false - DOWN
+    // renderList() START
+    renderList: function () {
+        let s = this.search.trim().toLowerCase();
+        let resultList = this.rates.filter(function (item) {
+            let title = item.title.toLowerCase();
+            let description = item.description.toLowerCase();
+            return title.includes(s) || description.includes(s);
+        });
 
-                if (this.sort != null) {
-                    if (this.sort) {
-                        resultList.sort((a, b) => a.price - b.price);
-                    } else {
-                        resultList.sort((a, b) => b.price - a.price); //сортировка по убыванию
-                    }
-                }
-                let cardbody = document.getElementById('cardPlace');
-                cardbody.innerHTML = resultList.map(item => `
+        if (this.sort != null) {
+            if (this.sort) {
+                resultList.sort((a, b) => a.price - b.price);
+            } else {
+                resultList.sort((a, b) => b.price - a.price); //сортировка по убыванию
+            }
+        }
+        
+        if (resultList.length) {
+            let cardbody = document.getElementById('cardPlace');
+            cardbody.innerHTML = resultList.map(item => `
                     <div class="p-2 ">
                         <div class="card text-center shadow">
                         <img src="${item.image}" class="rounded mx-auto d-block p-4" style="width: 10rem; height: 10rem" alt="...">
@@ -82,9 +84,14 @@ let MODEL = {
                                 <p class="card-text float-end"><b>$ ${item.price}</b></p>                            
                             </div>
                         </div>
-                    </div>`).join(''); // END referenceList() METHOD
-            }
-} // END MODEL
+                    </div>`).join('')
+        }
+        else {
+                cardPlace.innerHTML = ` <h2 class="text-center mb-3"> Nothing found... </h2>`
+        } 
+    }// END referenceList() METHOD
+}
+ // END MODEL
 
 /* LOAD DATA*/ 
 let rates = await fetch(URL);
