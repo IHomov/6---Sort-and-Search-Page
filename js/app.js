@@ -59,8 +59,9 @@ let MODEL = {
             renderList: function () { 
                 let s = this.search.trim().toLowerCase();
                 let resultList = this.rates.filter(function (item) {
-                    let txt = item.txt.toLowerCase();
-                    return txt.includes(s);
+                    let title = item.title.toLowerCase();
+                    let description = item.description.toLowerCase();
+                    return title.includes(s) || description.includes(s);
                 });
 
                 if (this.sort != null) {
@@ -78,8 +79,7 @@ let MODEL = {
                             <div class="card-body">
                                 <h5 class="card-title count-title">${item.title}</h5>
                                 <p class="card-text count-row">${item.description}</p>
-                                <p class="card-text float-end"><b>$ ${item.price}</b></p>
-                            
+                                <p class="card-text float-end"><b>$ ${item.price}</b></p>                            
                             </div>
                         </div>
                     </div>`).join(''); // END referenceList() METHOD
@@ -88,8 +88,11 @@ let MODEL = {
 
 /* LOAD DATA*/ 
 let rates = await fetch(URL);
+// rates = await rates.json();
+// console.log(rates);
 MODEL.rates = await rates.json(); // добавили полученные данные в наш объект
 MODEL.renderList();
+
 /* LOAD DATA END*/
 
 //SEARCH
